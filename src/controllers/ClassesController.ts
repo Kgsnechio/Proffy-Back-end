@@ -1,8 +1,8 @@
-import { Request, Response } from 'react'
+import { Request, Response } from 'express'
 
 import db from '../database/connection'
 import convertHourToMinutes from '../utils/convertHourToMinutes'
-import { Response, Response } from 'express'
+
 
 interface ScheduleItem {
     week_day: number;
@@ -11,7 +11,18 @@ interface ScheduleItem {
 }
 
 export default class ClassesController {
-    async create (request: Response, response: Response) {
+
+    async index (request: Request, response: Response){
+        const filters = request.query
+
+        if(!filters.week_day || !filters.subject || !filters.time) {
+            return response.status(400).json({
+                error: 'Missing filters to search classes'
+            })
+        }
+    }
+
+    async create (request: Request, response: Response) {
 
         const {
             name,
